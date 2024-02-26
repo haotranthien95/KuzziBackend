@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <ItemGroup>
+    <ProjectReference Include="..\Kuzzi.DataAccess\Kuzzi.DataAccess.csproj"/>
+    <ProjectReference Include="..\Kuzzi.Models\Kuzzi.Models.csproj"/>
+    <ProjectReference Include="..\Kuzzi.Utility\Kuzzi.Utility.csproj"/>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.2"/>
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0"/>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.1"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.2"/>
+  </ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+</Project>

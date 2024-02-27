@@ -32,4 +32,3 @@ jobs:
           cd /var/www/thichngamxe.vn
           rm -rf *
           unzip publish.zip
-          # Bạn có thể cần thêm các lệnh để khởi động lại dịch vụ web của bạn

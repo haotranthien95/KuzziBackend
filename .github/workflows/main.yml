@@ -29,7 +29,7 @@ jobs:
         username: ${{ secrets.SERVER_USER }}
         password: ${{ secrets.SERVER_PASSWORD }}
         script: |
-          cd /product/kuzzibe
+          cd /var/www/thichngamxe.vn
           rm -rf *
           unzip publish.zip
           # Bạn có thể cần thêm các lệnh để khởi động lại dịch vụ web của bạn

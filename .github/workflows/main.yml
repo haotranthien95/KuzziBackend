@@ -34,6 +34,4 @@ jobs:
         script: |
           scp -o StrictHostKeyChecking=no publish.zip ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/var/www/thichngamxe.vn/
           cd /var/www/thichngamxe.vn
-          rm -rf *
           unzip publish.zip
- 

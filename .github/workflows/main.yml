@@ -20,10 +20,10 @@ jobs:
       run: dotnet build --configuration Release
 
     - name: Publish
-      run: dotnet publish --configuration Release --output publish
+      run: dotnet publish --configuration Release --output thichngamxe.vn
 
     - name: Zip Publish Output
-      run: zip -r publish.zip publish/
+      run: zip -r thichngamxe.vn.zip thichngamxe.vn/
 
     - name: Deploy to Server
       uses: appleboy/ssh-action@master
@@ -35,6 +35,6 @@ jobs:
           cd /var/www/thichngamxe.vn
           ls -lrt
           rm -rf *
-          scp $GITHUB_WORKSPACE/publish.zip ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/var/www/thichngamxe.vn/
-          unzip publish.zip -d .
+          scp $GITHUB_WORKSPACE/publish.zip ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/var/www/
+          unzip thichngamxe.vn.zip -d .
   

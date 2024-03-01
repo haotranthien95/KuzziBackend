@@ -34,4 +34,5 @@ jobs:
         script: |
           cd /var/www/thichngamxe.vn
           rm -rf *
+          scp $GITHUB_WORKSPACE/publish.zip ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/path/to/your/app/
           unzip publish.zip -d .

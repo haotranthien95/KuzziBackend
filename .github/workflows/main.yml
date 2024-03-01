@@ -37,3 +37,4 @@ jobs:
           rm -rf *
           scp $GITHUB_WORKSPACE/publish.zip ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/var/www/thichngamxe.vn/
           unzip publish.zip -d .
+  

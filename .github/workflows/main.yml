@@ -32,9 +32,12 @@ jobs:
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SERVER_SSH_KEY }}
         script: |
+          sudo systemctl stop kuzzi.service
           cd /var/www/thichngamxe.vn
           ls -lrt
           rm -rf *
           scp $GITHUB_WORKSPACE/publish.zip ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/var/www/
-          unzip thichngamxe.vn.zip -d .
+          unzip thichngamxe.vn.zip -d
+          sudo systemctl restart nginx
+          sudo systemctl start kuzzi.service
   

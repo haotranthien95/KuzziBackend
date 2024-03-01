@@ -37,7 +37,7 @@ jobs:
           rm -rf *
           cd ..
           scp $GITHUB_WORKSPACE/thichngamxe.vn.zip ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/var/www/
-          unzip thichngamxe.vn.zip -d
+          unzip thichngamxe.vn.zip -d .
           sudo systemctl restart nginx
           sudo systemctl start kuzzi.service
   

@@ -33,6 +33,7 @@ jobs:
         key: ${{ secrets.SERVER_SSH_KEY }}
         script: |
           cd /var/www/thichngamxe.vn
+          ls -lrt
           rm -rf *
           scp $GITHUB_WORKSPACE/publish.zip ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/var/www/thichngamxe.vn/
           unzip publish.zip -d .

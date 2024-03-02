@@ -24,8 +24,15 @@ jobs:
 
     - name: Zip Publish Output
       run: zip -r thichngamxe.vn.zip thichngamxe.vn/
-    - name: Zip Upload
-      run: scp thichngamxe.vn.zip ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/var/www/
+    - name: Copy files via SCP
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        port: 22 # Đây là port mặc định, thay đổi nếu server của bạn sử dụng port khác
+        source: "thichngamxe.vn.zip" # Đường dẫn đến file hoặc thư mục trên máy runner của GitHub Actions
+        target: "/var/www/" # Đường dẫn đích trên server của bạn
 
     - name: Deploy to Server
       uses: appleboy/ssh-action@master

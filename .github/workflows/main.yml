@@ -24,6 +24,8 @@ jobs:
 
     - name: Zip Publish Output
       run: zip -r thichngamxe.vn.zip thichngamxe.vn/
+    - name: Zip Upload
+      run: scp $GITHUB_WORKSPACE/thichngamxe.vn.zip ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/var/www/
 
     - name: Deploy to Server
       uses: appleboy/ssh-action@master
@@ -36,9 +38,8 @@ jobs:
           cd /var/www/thichngamxe.vn
           rm -rf *
           cd ..
-          rm thichngamxe.vn.zip
-          scp $GITHUB_WORKSPACE/thichngamxe.vn.zip ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/var/www/
           unzip thichngamxe.vn.zip -d .
+          rm thichngamxe.vn.zip
           sudo systemctl restart nginx
           sudo systemctl start kuzzi.service
   

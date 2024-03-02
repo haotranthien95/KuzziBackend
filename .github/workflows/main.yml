@@ -36,6 +36,7 @@ jobs:
           cd /var/www/thichngamxe.vn
           rm -rf *
           cd ..
+          rm thichngamxe.vn.zip
           scp $GITHUB_WORKSPACE/thichngamxe.vn.zip ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/var/www/
           unzip thichngamxe.vn.zip -d .
           sudo systemctl restart nginx

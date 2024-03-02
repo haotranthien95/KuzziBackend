@@ -25,7 +25,7 @@ jobs:
     - name: Zip Publish Output
       run: zip -r thichngamxe.vn.zip thichngamxe.vn/
     - name: Zip Upload
-      run: scp $GITHUB_WORKSPACE/thichngamxe.vn.zip ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/var/www/
+      run: scp thichngamxe.vn.zip ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/var/www/
 
     - name: Deploy to Server
       uses: appleboy/ssh-action@master

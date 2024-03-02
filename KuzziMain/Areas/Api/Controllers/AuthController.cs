@@ -92,7 +92,9 @@ namespace KuzziMain.Areas.Api.Controllers
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                var token = GenerateJwtToken(user);
+                var role = await _userManager.GetRolesAsync(user);
+
+                var token = GenerateJwtToken(user, role.FirstOrDefault(SD.Role_User));
 
                 return Ok(new { Token = token, Message = "Success" });
             }
@@ -100,7 +102,7 @@ namespace KuzziMain.Areas.Api.Controllers
         }
 
         // Phương thức tạo JWT token
-        private string GenerateJwtToken(ApplicationUser user)
+        private string GenerateJwtToken(ApplicationUser user, string role)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -109,7 +111,8 @@ namespace KuzziMain.Areas.Api.Controllers
             {
         new Claim(JwtRegisteredClaimNames.Sub, user.Email),
         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        new Claim(ClaimTypes.NameIdentifier, user.Id)
+        new Claim(ClaimTypes.NameIdentifier, user.Id),
+        new Claim(ClaimTypes.Role, role)
     };
 
             var token = new JwtSecurityToken(

@@ -7,7 +7,9 @@ namespace Kuzzi.DataAccess.Repository.IRepository
 {
      public interface IUnitOfWork
     {
-         IApplicationUserRepository ApplicationUser {get; }
+        IApplicationUserRepository ApplicationUser {get; }
+        IConversationRepository Conversation {get; }
+
         void Save();
     }
 }

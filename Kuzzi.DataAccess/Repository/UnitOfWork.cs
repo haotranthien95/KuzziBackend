@@ -15,13 +15,13 @@ namespace Kuzzi.DataAccess.Repository
             _db = db;
 
             ApplicationUser = new ApplicationUserRepository(_db);
+            Conversation = new ConversationRepository(_db);
 
         }
 
         public IApplicationUserRepository ApplicationUser {get; private set;}
 
-
-
+        public IConversationRepository Conversation {get; private set;}
 
         public void Save()
         {

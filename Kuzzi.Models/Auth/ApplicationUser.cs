@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Kuzzi.Models.Auth
 {
-    public class ApplicationUser:IdentityUser
+    public class ApplicationUser: IdentityUser
     {
         [Required]
         public string Name {get;set;}

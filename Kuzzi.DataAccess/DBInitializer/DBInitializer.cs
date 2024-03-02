@@ -8,15 +8,15 @@ using Kuzzi.Utility;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace Doubt.DataAccess.DBInitializer
+namespace Kuzzi.DataAccess.DBInitializer
 {
     public class DBInitializer : IDBInitializer
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ApplicationDbContext _db;
 
-        public DBInitializer(UserManager<IdentityUser> userManager,
+        public DBInitializer(UserManager<ApplicationUser> userManager,
          RoleManager<IdentityRole> roleManager, ApplicationDbContext db)
         {
             _userManager = userManager;

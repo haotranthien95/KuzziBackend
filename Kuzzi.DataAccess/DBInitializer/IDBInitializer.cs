@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Doubt.DataAccess.DBInitializer
+namespace Kuzzi.DataAccess.DBInitializer
 {
     public interface IDBInitializer
     {

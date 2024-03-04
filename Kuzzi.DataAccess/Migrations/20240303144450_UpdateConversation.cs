@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Kuzzi.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class AddProductToDB : Migration
+    public partial class UpdateConversation : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -158,6 +158,31 @@ namespace Kuzzi.DataAccess.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Conversation",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "text", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdated = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConversationType = table.Column<string>(type: "text", nullable: true),
+                    CreatedUserId = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Conversation", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Conversation_AspNetUsers_CreatedUserId",
+                        column: x => x.CreatedUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.InsertData(
+                table: "Conversation",
+                columns: new[] { "Id", "ConversationType", "CreatedAt", "CreatedUserId", "LastUpdated" },
+                values: new object[] { "7c18029b-160d-4ae8-a092-bc30c5d9cdaa", null, new DateTime(2024, 3, 3, 14, 44, 48, 748, DateTimeKind.Utc).AddTicks(5930), null, new DateTime(2024, 3, 3, 14, 44, 48, 748, DateTimeKind.Utc).AddTicks(5930) });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -194,6 +219,11 @@ namespace Kuzzi.DataAccess.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Conversation_CreatedUserId",
+                table: "Conversation",
+                column: "CreatedUserId");
         }
 
         /// <inheritdoc />
@@ -213,6 +243,9 @@ namespace Kuzzi.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Conversation");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

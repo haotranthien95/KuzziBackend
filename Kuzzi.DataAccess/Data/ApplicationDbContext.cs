@@ -23,9 +23,8 @@ namespace Kuzzi.DataAccess.Data
            
           base.OnModelCreating(modelBuilder);
           modelBuilder.Entity<Conversation>().HasData(
-                new Conversation { Id = 1, Name = "Action" },
-                new Conversation { Id = 2, Name = "Active",  },
-                new Conversation { Id = 3, Name = "Movie",  }
+                new Conversation { Id = Guid.NewGuid().ToString(), CreatedAt = DateTime.UtcNow,LastUpdated = DateTime.UtcNow }
+
                 );
         }}
     

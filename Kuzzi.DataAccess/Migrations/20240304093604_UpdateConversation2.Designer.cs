@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Kuzzi.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240302024322_AddProductToDB")]
-    partial class AddProductToDB
+    [Migration("20240304093604_UpdateConversation2")]
+    partial class UpdateConversation2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -91,6 +91,38 @@ namespace Kuzzi.DataAccess.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("Kuzzi.Models.Chat.Conversation", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ConversationType")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedUserId")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("LastUpdated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedUserId");
+
+                    b.ToTable("Conversation");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "25a1e0f1-e5c5-4751-9926-7be33b5cb429",
+                            CreatedAt = new DateTime(2024, 3, 4, 9, 36, 2, 996, DateTimeKind.Utc).AddTicks(1250),
+                            LastUpdated = new DateTime(2024, 3, 4, 9, 36, 2, 996, DateTimeKind.Utc).AddTicks(1250)
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -223,6 +255,15 @@ namespace Kuzzi.DataAccess.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("Kuzzi.Models.Chat.Conversation", b =>
+                {
+                    b.HasOne("Kuzzi.Models.Auth.ApplicationUser", "CreatedUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedUserId");
+
+                    b.Navigation("CreatedUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

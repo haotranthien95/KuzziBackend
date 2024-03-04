@@ -46,18 +46,41 @@ namespace Kuzzi.DataAccess.DBInitializer
                 _roleManager.CreateAsync(new IdentityRole(SD.Role_Admin)).GetAwaiter().GetResult();
                 _roleManager.CreateAsync(new IdentityRole(SD.Role_Employee)).GetAwaiter().GetResult();
 
-            // if role are not create, then we will create a new user as well
-            _userManager.CreateAsync(new ApplicationUser
-            {
-                UserName = "admin@gmail.com",
-                Email = "admin@gmail.com",
-                Name = "Admin",
-                PhoneNumber = "000000000",
-            }, "Gaumoe@2").GetAwaiter().GetResult();
-            ApplicationUser user = _db.ApplicationUser.FirstOrDefault(u=>u.Email =="admin@gmail.com");
-            _userManager.AddToRoleAsync(user, SD.Role_Admin).GetAwaiter().GetResult();
+                // if role are not create, then we will create a new user as well
+
+
+                CreateUser(new ApplicationUser
+                {
+                    UserName = "admin@gmail.com",
+                    Email = "admin@gmail.com",
+                    Name = "Admin",
+                    PhoneNumber = "000000000",
+                }, "Gaumoe@2", SD.Role_Admin);
+                CreateUser(new ApplicationUser
+                {
+                    UserName = "user1@gmail.com",
+                    Email = "user1@gmail.com",
+                    Name = "user1",
+                    PhoneNumber = "000000000",
+                }, "Gaumoe@2", SD.Role_Admin);
+                CreateUser(new ApplicationUser
+                {
+                    UserName = "user2@gmail.com",
+                    Email = "user2@gmail.com",
+                    Name = "user2",
+                    PhoneNumber = "000000000",
+                }, "Gaumoe@2", SD.Role_Admin);
             }
             return;
         }
+
+        private void CreateUser(ApplicationUser newUser, string password, string role)
+        {
+            _userManager.CreateAsync(newUser, password).GetAwaiter().GetResult();
+            ApplicationUser user = _db.ApplicationUser.FirstOrDefault(u => u.Email == "admin@gmail.com");
+            _userManager.AddToRoleAsync(user, role).GetAwaiter().GetResult();
+        }
+
+
     }
 }

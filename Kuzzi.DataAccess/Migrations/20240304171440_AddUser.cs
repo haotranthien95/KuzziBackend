@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Kuzzi.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateConversation : Migration
+    public partial class AddUser : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -159,6 +159,26 @@ namespace Kuzzi.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ChatUser",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "text", nullable: false),
+                    AliasName = table.Column<string>(type: "text", nullable: true),
+                    Avatar = table.Column<string>(type: "text", nullable: true),
+                    ApplicationUserId = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChatUser", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ChatUser_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Conversation",
                 columns: table => new
                 {
@@ -166,22 +186,41 @@ namespace Kuzzi.DataAccess.Migrations
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastUpdated = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ConversationType = table.Column<string>(type: "text", nullable: true),
-                    CreatedUserId = table.Column<string>(type: "text", nullable: true)
+                    CreatedChatUserId = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Conversation", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Conversation_AspNetUsers_CreatedUserId",
-                        column: x => x.CreatedUserId,
-                        principalTable: "AspNetUsers",
+                        name: "FK_Conversation_ChatUser_CreatedChatUserId",
+                        column: x => x.CreatedChatUserId,
+                        principalTable: "ChatUser",
                         principalColumn: "Id");
                 });
 
-            migrationBuilder.InsertData(
-                table: "Conversation",
-                columns: new[] { "Id", "ConversationType", "CreatedAt", "CreatedUserId", "LastUpdated" },
-                values: new object[] { "7c18029b-160d-4ae8-a092-bc30c5d9cdaa", null, new DateTime(2024, 3, 3, 14, 44, 48, 748, DateTimeKind.Utc).AddTicks(5930), null, new DateTime(2024, 3, 3, 14, 44, 48, 748, DateTimeKind.Utc).AddTicks(5930) });
+            migrationBuilder.CreateTable(
+                name: "ChatUserConversation",
+                columns: table => new
+                {
+                    ChatUserId = table.Column<string>(type: "text", nullable: false),
+                    ConversationId = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChatUserConversation", x => new { x.ChatUserId, x.ConversationId });
+                    table.ForeignKey(
+                        name: "FK_ChatUserConversation_ChatUser_ChatUserId",
+                        column: x => x.ChatUserId,
+                        principalTable: "ChatUser",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ChatUserConversation_Conversation_ConversationId",
+                        column: x => x.ConversationId,
+                        principalTable: "Conversation",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -221,9 +260,19 @@ namespace Kuzzi.DataAccess.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Conversation_CreatedUserId",
+                name: "IX_ChatUser_ApplicationUserId",
+                table: "ChatUser",
+                column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChatUserConversation_ConversationId",
+                table: "ChatUserConversation",
+                column: "ConversationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Conversation_CreatedChatUserId",
                 table: "Conversation",
-                column: "CreatedUserId");
+                column: "CreatedChatUserId");
         }
 
         /// <inheritdoc />
@@ -245,10 +294,16 @@ namespace Kuzzi.DataAccess.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Conversation");
+                name: "ChatUserConversation");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Conversation");
+
+            migrationBuilder.DropTable(
+                name: "ChatUser");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

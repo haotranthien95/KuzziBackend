@@ -23,9 +23,12 @@ namespace Kuzzi.Models.Chat
         
         public string? ConversationType {get; set;}
 
-        public string? CreatedUserId {get; set;}
-        [ForeignKey("CreatedUserId")]
+        public string? CreatedChatUserId {get; set;}
+        [ForeignKey("CreatedChatUserId")]
         [ValidateNever]
-        public ApplicationUser? CreatedUser {get; set;}
+        public ChatUser? CreatedUser {get; set;}
+
+        public ICollection<ChatUserConversation>? ChatUserConversation { get; set; }
+
     }
 }

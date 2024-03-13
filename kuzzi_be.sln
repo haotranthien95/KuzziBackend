@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kuzzi.Models", "Kuzzi.Model
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kuzzi.Utility", "Kuzzi.Utility\Kuzzi.Utility.csproj", "{38A66EF0-E364-41C4-BEB6-A75452D9A54D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kuzzi.RealTimeService", "Kuzzi.RealTimeService\Kuzzi.RealTimeService.csproj", "{F6DA6718-6627-4BD1-8C7D-972EC1BBFE6C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{38A66EF0-E364-41C4-BEB6-A75452D9A54D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38A66EF0-E364-41C4-BEB6-A75452D9A54D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38A66EF0-E364-41C4-BEB6-A75452D9A54D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6DA6718-6627-4BD1-8C7D-972EC1BBFE6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6DA6718-6627-4BD1-8C7D-972EC1BBFE6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6DA6718-6627-4BD1-8C7D-972EC1BBFE6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6DA6718-6627-4BD1-8C7D-972EC1BBFE6C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

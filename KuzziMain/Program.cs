@@ -5,12 +5,16 @@ using Kuzzi.DataAccess.DBInitializer;
 using Kuzzi.DataAccess.Repository;
 using Kuzzi.DataAccess.Repository.IRepository;
 using Kuzzi.Models.Auth;
+using Kuzzi.RealTimeService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+
 var configuration = builder.Configuration;
 // Add services to the container.
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -37,7 +41,7 @@ options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             ValidateIssuerSigningKey = true,
             ValidIssuer = configuration["Jwt:Issuer"],
             ValidAudience = configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"])),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!)),
             RoleClaimType =  ClaimTypes.Role
        
             };
@@ -77,6 +81,8 @@ SeedDatabase();
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");
 
+
+app.MapHub<ChatHub>("/chathub");
 
 app.Run();
 

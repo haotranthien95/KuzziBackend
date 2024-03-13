@@ -13,7 +13,7 @@ namespace Kuzzi.Models.Auth
     public class ApplicationUser: IdentityUser
     {
         [Required]
-        public string Name {get;set;}
+        public string? Name {get;set;}
 
     }
 }

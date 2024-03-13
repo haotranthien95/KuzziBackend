@@ -9,6 +9,9 @@ namespace Kuzzi.DataAccess.Repository.IRepository
     {
         IApplicationUserRepository ApplicationUser {get; }
         IConversationRepository Conversation {get; }
+        IMessageRepository Message {get; }
+        IChatUserRepository ChatUser {get; }
+        IChatUserConversationRepository ChatUserConversation {get; }
 
         void Save();
     }

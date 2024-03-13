@@ -16,12 +16,20 @@ namespace Kuzzi.DataAccess.Repository
 
             ApplicationUser = new ApplicationUserRepository(_db);
             Conversation = new ConversationRepository(_db);
+            ChatUser = new ChatUserRepository(_db);
+            Message = new MessageRepository(_db);
+            ChatUserConversation = new ChatUserConversationRepository(_db);
 
         }
 
         public IApplicationUserRepository ApplicationUser {get; private set;}
 
         public IConversationRepository Conversation {get; private set;}
+
+        public IChatUserRepository ChatUser  {get; private set;}
+        public IMessageRepository Message  {get; private set;}
+
+        public IChatUserConversationRepository ChatUserConversation {get; private set;}
 
         public void Save()
         {

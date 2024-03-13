@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Kuzzi.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240303144450_UpdateConversation")]
-    partial class UpdateConversation
+    [Migration("20240306163612_AddMessage")]
+    partial class AddMessage
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -93,6 +93,43 @@ namespace Kuzzi.DataAccess.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Kuzzi.Models.Chat.ChatUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AliasName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Avatar")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.ToTable("ChatUser");
+                });
+
+            modelBuilder.Entity("Kuzzi.Models.Chat.ChatUserConversation", b =>
+                {
+                    b.Property<string>("ChatUserId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ConversationId")
+                        .HasColumnType("text");
+
+                    b.HasKey("ChatUserId", "ConversationId");
+
+                    b.HasIndex("ConversationId");
+
+                    b.ToTable("ChatUserConversation");
+                });
+
             modelBuilder.Entity("Kuzzi.Models.Chat.Conversation", b =>
                 {
                     b.Property<string>("Id")
@@ -104,7 +141,7 @@ namespace Kuzzi.DataAccess.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("CreatedUserId")
+                    b.Property<string>("CreatedChatUserId")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("LastUpdated")
@@ -112,17 +149,71 @@ namespace Kuzzi.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedUserId");
+                    b.HasIndex("CreatedChatUserId");
 
                     b.ToTable("Conversation");
+                });
 
-                    b.HasData(
-                        new
-                        {
-                            Id = "7c18029b-160d-4ae8-a092-bc30c5d9cdaa",
-                            CreatedAt = new DateTime(2024, 3, 3, 14, 44, 48, 748, DateTimeKind.Utc).AddTicks(5930),
-                            LastUpdated = new DateTime(2024, 3, 3, 14, 44, 48, 748, DateTimeKind.Utc).AddTicks(5930)
-                        });
+            modelBuilder.Entity("Kuzzi.Models.Chat.Message", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ConversationId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LocalMessageId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("SenderUserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("SentAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConversationId");
+
+                    b.HasIndex("SenderUserId");
+
+                    b.ToTable("Message");
+                });
+
+            modelBuilder.Entity("Kuzzi.Models.Chat.SeenMessage", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("MessageId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("SeenAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MessageId");
+
+                    b.ToTable("SeenMessage");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -257,13 +348,73 @@ namespace Kuzzi.DataAccess.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Kuzzi.Models.Chat.ChatUser", b =>
+                {
+                    b.HasOne("Kuzzi.Models.Auth.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+                });
+
+            modelBuilder.Entity("Kuzzi.Models.Chat.ChatUserConversation", b =>
+                {
+                    b.HasOne("Kuzzi.Models.Chat.ChatUser", "ChatUser")
+                        .WithMany("ChatUserConversation")
+                        .HasForeignKey("ChatUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Kuzzi.Models.Chat.Conversation", "Conversation")
+                        .WithMany("ChatUserConversation")
+                        .HasForeignKey("ConversationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ChatUser");
+
+                    b.Navigation("Conversation");
+                });
+
             modelBuilder.Entity("Kuzzi.Models.Chat.Conversation", b =>
                 {
-                    b.HasOne("Kuzzi.Models.Auth.ApplicationUser", "CreatedUser")
+                    b.HasOne("Kuzzi.Models.Chat.ChatUser", "CreatedUser")
                         .WithMany()
-                        .HasForeignKey("CreatedUserId");
+                        .HasForeignKey("CreatedChatUserId");
 
                     b.Navigation("CreatedUser");
+                });
+
+            modelBuilder.Entity("Kuzzi.Models.Chat.Message", b =>
+                {
+                    b.HasOne("Kuzzi.Models.Chat.Conversation", "Conversation")
+                        .WithMany()
+                        .HasForeignKey("ConversationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Kuzzi.Models.Chat.ChatUser", "SenderUser")
+                        .WithMany()
+                        .HasForeignKey("SenderUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Conversation");
+
+                    b.Navigation("SenderUser");
+                });
+
+            modelBuilder.Entity("Kuzzi.Models.Chat.SeenMessage", b =>
+                {
+                    b.HasOne("Kuzzi.Models.Chat.Message", "Message")
+                        .WithMany()
+                        .HasForeignKey("MessageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Message");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -315,6 +466,16 @@ namespace Kuzzi.DataAccess.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Kuzzi.Models.Chat.ChatUser", b =>
+                {
+                    b.Navigation("ChatUserConversation");
+                });
+
+            modelBuilder.Entity("Kuzzi.Models.Chat.Conversation", b =>
+                {
+                    b.Navigation("ChatUserConversation");
                 });
 #pragma warning restore 612, 618
         }

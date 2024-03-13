@@ -7,6 +7,7 @@ using Kuzzi.Models.Auth;
 using Kuzzi.Utility;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Kuzzi.DataAccess.DBInitializer
 {
@@ -15,12 +16,14 @@ namespace Kuzzi.DataAccess.DBInitializer
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ApplicationDbContext _db;
+        private readonly ILogger<DBInitializer> _logger;
 
         public DBInitializer(UserManager<ApplicationUser> userManager,
-         RoleManager<IdentityRole> roleManager, ApplicationDbContext db)
+         RoleManager<IdentityRole> roleManager, ApplicationDbContext db,ILogger<DBInitializer> logger)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _logger = logger;
             _db = db;
         }
         public void Initialize()
@@ -36,7 +39,7 @@ namespace Kuzzi.DataAccess.DBInitializer
             }
             catch (Exception ex)
             {
-
+                _logger.LogError(ex.Message);
             }
 
             // create role if they are not created
@@ -77,8 +80,10 @@ namespace Kuzzi.DataAccess.DBInitializer
         private void CreateUser(ApplicationUser newUser, string password, string role)
         {
             _userManager.CreateAsync(newUser, password).GetAwaiter().GetResult();
-            ApplicationUser user = _db.ApplicationUser.FirstOrDefault(u => u.Email == "admin@gmail.com");
+            ApplicationUser? user = _db.ApplicationUser.FirstOrDefault(u => u.Email == "admin@gmail.com");
+            if(user!= null){
             _userManager.AddToRoleAsync(user, role).GetAwaiter().GetResult();
+            }
         }
 
 

@@ -8,13 +8,13 @@ using Kuzzi.Models.Chat;
 
 namespace Kuzzi.DataAccess.Repository
 {
-    public class ConversationRepository : Repository<Conversation>, IConversationRepository
+    public class MessageRepository : Repository<Message>, IMessageRepository
     {
-        public ConversationRepository(ApplicationDbContext db) : base(db)
+        public MessageRepository(ApplicationDbContext db) : base(db)
         {
         }
 
-        public void Update(Conversation obj)
+        public void Update(Message obj)
         {
             return;
         }

@@ -9,3 +9,4 @@ public class ChatHub : Hub
         await Clients.All.SendAsync("ReceiveMessage", user, message);
     }
 }
+q
